@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.qiscus.rtc.webviewsample.basic.IncomingActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/caller_name_calling">
+            <ImageView
+                android:id="@+id/caller_avatar"
+                android:src="@drawable/avatar"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/caller_name_calling"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/caller_name"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:text="Panggilan masuk"
+            android:textAllCaps="true"
+            android:textColor="@android:color/black"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/caller_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/accept_call_button"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:maxLength="25"
+            android:background="@android:color/transparent"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:textColor="@android:color/black"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/accept_call_button"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_above="@+id/reject_call_button"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/holo_green_dark"
+            android:text="Terima"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/reject_call_button"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/holo_red_dark"
+            android:text="Tolak"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+</RelativeLayout>
