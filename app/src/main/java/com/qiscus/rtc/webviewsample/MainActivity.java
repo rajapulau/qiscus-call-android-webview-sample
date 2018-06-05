@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
+import com.qiscus.rtc.webviewsample.basic.IncomingActivity;
+import com.qiscus.rtc.webviewsample.conference.ConfActivity;
 import com.qiscus.rtc.webviewsample.utils.presenter.LoginPresenter;
 import com.qiscus.sdk.Qiscus;
 
@@ -71,8 +73,13 @@ public class MainActivity extends AppCompatActivity implements LoginPresenter.Vi
 
         if (data != null) {
             String callType = data.getLastPathSegment();
-            Log.d(TAG, callType);
-            Log.d(TAG, data.getEncodedPath());
+
+            if (callType.equals("room.html")) {
+                String call_room_id = data.getQueryParameter("room");
+                Intent i = new Intent(getApplicationContext(), ConfActivity.class);
+                i.putExtra("call_room_id", call_room_id);
+                startActivity(i);
+            }
         } else {
             if (Qiscus.hasSetupUser()) {
                 startActivity(new Intent(MainActivity.this, ContactActivity.class));
