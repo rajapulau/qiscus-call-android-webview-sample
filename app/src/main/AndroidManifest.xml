@@ -43,7 +43,8 @@
         <activity
             android:name=".basic.IncomingActivity"
             android:label="@string/title_activity_incoming"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".conference.ConfActivity"></activity>
     </application>
 
 </manifest>
