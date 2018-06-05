@@ -52,7 +52,7 @@
 
     $(function() {
       var str;
-      var rem_id = null;
+      var rem_id = [];
       var room = window.location.hash.substring(1);
       qiscusrtc = new QiscusCall('sample-application-C2', 'KpPiqKGpoN');
 
@@ -90,14 +90,14 @@
           remote_video.srcObject = stream;
         }
 
-        $('#mini-video-box').prepend('<video id="mini-video-' + id + '" class="mini-video active" autoplay></video>');
-        var mini_video = document.querySelector('#mini-video-' + id);
+        $('#mini-video-box').prepend('<video id="mini-video-' + escapes(id) + '" class="mini-video active" autoplay></video>');
+        var mini_video = document.querySelector('#mini-video-' + escapes(id));
         mini_video.srcObject = stream;
       };
       qiscusrtc.onPeerClosed = function(id) {
         if (rem_id.indexOf(id) > -1) {
           if (rem_id.length > 1) {
-            $('#mini-video-' + id).remove();
+            $('#mini-video-' + escapes(id)).remove();
 
             if (rem_active == id) {
               var get_video = document.querySelector('#mini-video-box video:last-child');
@@ -106,7 +106,7 @@
               remote_video.srcObject = str_;
             }
           } else {
-            $('#mini-video-' + id).remove();
+            $('#mini-video-' + escapes(id)).remove();
             $('#remote-video').removeClass('active');
             $('#my-mini-video').removeClass('active');
             var video = document.querySelector('#local-video');
@@ -155,6 +155,10 @@
         qiscusrtc.endCall();
       });
     });
+
+    function escapes(str) {
+      return str.replace(/[^\w\s]/gi, '');
+    }
   </script>
 </body>
 
