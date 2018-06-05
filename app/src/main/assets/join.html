@@ -15,12 +15,6 @@
     <video id="remote-video" autoplay></video>
     <video id="local-video" autoplay muted></video>
   </div>
-  <footer id="footer" class="hidden">
-    <div id="sharing-div">
-      <div id="room-link">Waiting for someone to join this room: <a id="room-link-href" href="#" target="_blank">room</a></div>
-    </div>
-    <div id="rejoin-div" class="hidden"><span>You have left the call.</span> <button id="rejoin-button">REJOIN</button><button id="new-room-button">NEW ROOM</button></div>
-  </footer>
   <div id="icons" class="hidden">
     <svg id="mute-audio" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewbox="-10 -10 68 68">
     <title>Title</title>
@@ -66,7 +60,6 @@
 
       qiscusrtc.onLocalStream = function(stream) {
         $('#videos').removeClass('hidden');
-        $('#footer').removeClass('hidden');
         var video = document.querySelector('#local-video');
         video.srcObject = stream;
         str = stream;

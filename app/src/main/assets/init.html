@@ -15,33 +15,6 @@
     <video id="remote-video" autoplay></video>
     <video id="local-video" autoplay muted></video>
   </div>
-  <div id="room-selection">
-    <h1>QiscusRTC</h1>
-    <p id="instructions">Please enter room name.</p>
-    <div>
-      <div id="room-id-input-div">
-        <input type="text" id="room-id-input" autofocus />
-        <label class="error-label hidden" for="room-id-input" id="room-id-input-label">Name must be 5 or more characters.</label>
-      </div>
-      <div id="room-id-input-buttons">
-        <button id="join-button">JOIN</button>
-      </div>
-    </div>
-    <div id="recent-rooms">
-      <p>Recently used rooms:</p>
-      <ul id="recent-rooms-list"></ul>
-    </div>
-  </div>
-  <div id="confirm-join-div" class="hidden">
-    <div>Ready to join<span id="confirm-join-room-span"></span>?</div>
-    <button id="confirm-join-button">JOIN</button>
-  </div>
-  <footer id="footer" class="hidden">
-    <div id="sharing-div">
-      <div id="room-link">Waiting for someone to join this room: <a id="room-link-href" href="#" target="_blank">room</a></div>
-    </div>
-    <div id="rejoin-div" class="hidden"><span>You have left the call.</span> <button id="rejoin-button">REJOIN</button><button id="new-room-button">NEW ROOM</button></div>
-  </footer>
   <div id="icons" class="hidden">
     <svg id="mute-audio" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewbox="-10 -10 68 68">
     <title>Title</title>
@@ -87,10 +60,6 @@
       qiscusrtc.onLocalStream = function(stream) {
         $('#videos').removeClass('hidden');
         $('#footer').removeClass('hidden');
-        $('#sharing-div').addClass('active');
-        $('#room-selection').addClass('hidden');
-        $('#room-link-href').attr('href', window.location.href + '/join.html#' + room);
-        $('#room-link-href').text(window.location.href + '/join.html#' + room);
         var video = document.querySelector('#local-video');
         video.srcObject = stream;
         str = stream;
@@ -99,7 +68,6 @@
         rem_id = id;
         $('#icons').removeClass('hidden');
         $('#icons').addClass('active');
-        $('#sharing-div').removeClass('active');
         $('#remote-video').addClass('active');
         $('#mini-video').addClass('active');
         var video = document.querySelector('#local-video');
