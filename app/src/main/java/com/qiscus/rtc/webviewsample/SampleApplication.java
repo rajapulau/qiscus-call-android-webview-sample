@@ -70,7 +70,7 @@ public class SampleApplication extends Application {
             JSONObject payload = json.getJSONObject("payload");
             Log.d("SINI", payload.toString());
 
-            if (payload.get("type").equals("call")) {
+            if (payload.get("type").equals("webview_call") || payload.get("type").equals("call")) {
                 String event = payload.getString("call_event");
                 String call_room_id = payload.getString("call_room_id");
                 switch (event.toLowerCase()) {

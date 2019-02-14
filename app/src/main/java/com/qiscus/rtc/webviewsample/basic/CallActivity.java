@@ -50,7 +50,7 @@ public class CallActivity extends AppCompatActivity {
         setUpWebViewDefaults(webView);
         webView.setWebChromeClient(new WebChromeClient(){
             @Override
-            public void onPermissionRequest(final PermissionRequest request) {;
+            public void onPermissionRequest(final PermissionRequest request) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

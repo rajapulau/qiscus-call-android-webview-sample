@@ -8,19 +8,30 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.qiscus.nirmana.Nirmana;
 import com.qiscus.rtc.webviewsample.basic.CallActivity;
 import com.qiscus.rtc.webviewsample.utils.AsyncHttpUrlConnection;
 import com.qiscus.sdk.Qiscus;
 import com.qiscus.sdk.data.model.QiscusChatRoom;
+import com.qiscus.sdk.data.model.QiscusComment;
 import com.qiscus.sdk.data.model.QiscusRoomMember;
 import com.qiscus.sdk.ui.QiscusBaseChatActivity;
+import com.qiscus.sdk.ui.QiscusChannelActivity;
+import com.qiscus.sdk.ui.QiscusChatActivity;
 import com.qiscus.sdk.ui.fragment.QiscusBaseChatFragment;
+import com.qiscus.sdk.ui.fragment.QiscusChatFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 public class CustomChatActivity extends QiscusBaseChatActivity {
     private static final String TAG = CustomChatActivity.class.getSimpleName();
@@ -31,9 +42,45 @@ public class CustomChatActivity extends QiscusBaseChatActivity {
     private ImageView voiceCall;
     private ImageView videoCall;
 
+    private TextView mTitle;
+    private TextView sTitle;
+    private TextView txtPlatform;
+    private Toolbar toolbar;
+    private ImageView avatar;
+    private String subtitle;
+
+//    public static Intent generateIntent(Context context, QiscusChatRoom qiscusChatRoom) {
+//        Intent intent = new Intent(context, CustomChatActivity.class);
+//        intent.putExtra(CHAT_ROOM_DATA, qiscusChatRoom);
+//        return intent;
+//    }
+
     public static Intent generateIntent(Context context, QiscusChatRoom qiscusChatRoom) {
+        return generateIntent(context, qiscusChatRoom, null, null,
+                false, null, null);
+    }
+
+    public static Intent generateIntent(Context context, QiscusChatRoom qiscusChatRoom,
+                                        String startingMessage, List<File> shareFiles,
+                                        boolean autoSendExtra, List<QiscusComment> comments,
+                                        QiscusComment scrollToComment) {
+//        if (!qiscusChatRoom.isGroup()) {
+//            return CustomChatActivity.generateIntent(context, qiscusChatRoom, startingMessage,
+//                    shareFiles, autoSendExtra, comments, scrollToComment);
+//        }
+
+        if (qiscusChatRoom.isChannel()) {
+            return QiscusChannelActivity.generateIntent(context, qiscusChatRoom, startingMessage,
+                    shareFiles, autoSendExtra, comments, scrollToComment);
+        }
+
         Intent intent = new Intent(context, CustomChatActivity.class);
         intent.putExtra(CHAT_ROOM_DATA, qiscusChatRoom);
+        intent.putExtra(EXTRA_STARTING_MESSAGE, startingMessage);
+        intent.putExtra(EXTRA_SHARING_FILES, (Serializable) shareFiles);
+        intent.putExtra(EXTRA_AUTO_SEND, autoSendExtra);
+        intent.putParcelableArrayListExtra(EXTRA_FORWARD_COMMENTS, (ArrayList<QiscusComment>) comments);
+        intent.putExtra(EXTRA_SCROLL_TO_COMMENT, scrollToComment);
         return intent;
     }
 
@@ -46,20 +93,40 @@ public class CustomChatActivity extends QiscusBaseChatActivity {
     protected void onLoadView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        title = (TextView) findViewById(R.id.tv_title);
         back = (ImageView) findViewById(R.id.back);
         videoCall = (ImageView) findViewById(R.id.video_call);
+        avatar = findViewById(R.id.profile_picture);
+        mTitle = findViewById(R.id.tv_title);
+        sTitle = findViewById(R.id.tv_subtitle);
+        sTitle = findViewById(R.id.tv_subtitle);
+    }
+
+    @Override
+    protected void binRoomData() {
+        super.binRoomData();
+        generateSubtitle();
+        mTitle.setText(qiscusChatRoom.getName());
+        sTitle.setVisibility(View.VISIBLE);
+        sTitle.setText(subtitle);
+
+        Nirmana.getInstance().get()
+                .load(qiscusChatRoom.getAvatarUrl())
+                .placeholder(R.drawable.ic_qiscus_avatar)
+                .error(R.drawable.ic_qiscus_avatar)
+                .dontAnimate()
+                .into(avatar);
+
     }
 
     @Override
     protected QiscusBaseChatFragment onCreateChatFragment() {
-        return CustomChatFragment.newInstance(qiscusChatRoom);
+        return QiscusChatFragment.newInstance(qiscusChatRoom);
     }
 
     @Override
     protected void onViewReady(Bundle savedInstanceState) {
         super.onViewReady(savedInstanceState);
-        title.setText(qiscusChatRoom.getName());
+        mTitle.setText(qiscusChatRoom.getName());
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,6 +154,26 @@ public class CustomChatActivity extends QiscusBaseChatActivity {
     @Override
     public void onUserTyping(String user, boolean typing) {
         //
+    }
+
+    protected void generateSubtitle() {
+        subtitle = "";
+        int count = 0;
+        Collections.sort(qiscusChatRoom.getMember(), (o1, o2) -> o1.getUsername().compareTo(o2.getUsername()));
+        for (QiscusRoomMember member : qiscusChatRoom.getMember()) {
+            if (!member.getEmail().equalsIgnoreCase(Qiscus.getQiscusAccount().getEmail())) {
+                count++;
+                subtitle += member.getUsername().split(" ")[0];
+                if (count < qiscusChatRoom.getMember().size() - 1) {
+                    subtitle += ", ";
+                }
+            }
+            if (count >= 10) {
+                break;
+            }
+        }
+        subtitle += " " + getString(R.string.qiscus_group_member_closing);
+        if (count == 0) subtitle = getString(R.string.qiscus_group_member_only_you);
     }
 
     private void startVideoCall(final QiscusRoomMember target) {

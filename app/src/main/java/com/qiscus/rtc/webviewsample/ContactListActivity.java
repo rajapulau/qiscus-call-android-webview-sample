@@ -11,6 +11,7 @@ import com.qiscus.rtc.webviewsample.utils.adapter.OnItemClickListener;
 import com.qiscus.rtc.webviewsample.utils.model.User;
 import com.qiscus.rtc.webviewsample.utils.presenter.ContactPresenter;
 import com.qiscus.sdk.data.model.QiscusChatRoom;
+import com.qiscus.sdk.ui.QiscusChatActivity;
 
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class ContactListActivity extends AppCompatActivity implements ContactPre
 
     @Override
     public void showChatRoomPage(QiscusChatRoom chatRoom) {
+//        startActivity(QiscusChatActivity.generateIntent(this, chatRoom));
         startActivity(CustomChatActivity.generateIntent(this, chatRoom));
     }
 

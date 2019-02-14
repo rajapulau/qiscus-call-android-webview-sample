@@ -16,6 +16,7 @@ import com.qiscus.rtc.webviewsample.utils.adapter.ChatRoomAdapter;
 import com.qiscus.rtc.webviewsample.utils.adapter.OnItemClickListener;
 import com.qiscus.rtc.webviewsample.utils.presenter.HomePresenter;
 import com.qiscus.sdk.data.model.QiscusChatRoom;
+import com.qiscus.sdk.ui.QiscusChatActivity;
 
 import java.util.List;
 
@@ -85,6 +86,7 @@ public class ContactActivity extends AppCompatActivity implements HomePresenter.
 
     @Override
     public void showChatRoomPage(QiscusChatRoom chatRoom) {
+//        startActivity(QiscusChatActivity.generateIntent(this, chatRoom));
         startActivity(CustomChatActivity.generateIntent(this, chatRoom));
     }
 
